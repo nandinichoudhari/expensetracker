@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+        body {
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            margin: 0;
+            background: linear-gradient(45deg, #ffeff0, #ffc3e6);
+            animation: gradientBG 10s infinite alternate;
+            overflow-x: hidden;
+            padding: 20px;
+        }
+        @keyframes gradientBG {
+            0% { background-position: left; }
+            100% { background-position: right; }
+        }
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 20px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+        h1 {
+            color: #ff69b4;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        h3 {
+            color: #ff1493;
+            font-size: 1.3rem;
+        }
+        .summary {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            margin: 20px 0;
+        }
+        .summary div {
+            background: #ffe6f2;
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+            flex: 1;
+            margin: 10px;
+            min-width: 100px;
+        }
+        .expense-section {
+            margin: 20px 0;
+        }
+        .expense-section input, .expense-section button {
+            padding: 10px;
+            margin: 5px;
+            border-radius: 5px;
+            border: 1px solid #ff99cc;
+            background: #fff0f5;
+            font-size: 1rem;
+            width: 90%;
+            max-width: 300px;
+        }
+        button {
+            background: #ff69b4;
+            color: black;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover {
+            background: #ff1493;
+        }
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ffe6f2;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+            white-space: nowrap;
+        }
+        th {
+            background-color: #ffccf2;
+            color: #ff1493;
+        }
+        td {
+            background-color: #fff0f5;
+        }
+        td.date {
+            font-weight: bold;
+            color: #ff69b4;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+        }
+        @media (max-width: 768px) {
+            .summary {
+                flex-direction: column;
+            }
+            .summary div {
+                width: 90%;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+            .expense-section input, .expense-section button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Expense Tracker</h1>
+        <div class="summary">
+            <div>
+                <h3>Set Budget</h3>
+                <input type="number" id="budget" placeholder="" onchange="setBudget()">
+            </div>
+            <div>
+                <h3>Total Spent</h3>
+                <p id="totalSpent">₹0</p>
+            </div>
+            <div>
+                <h3>Remaining</h3>
+                <p id="remainingBudget">₹0</p>
+            </div>
+        </div>
+
+        <div class="expense-section">
+            <input type="text" id="expenseName" placeholder="Expense Name">
+            <input type="number" id="expenseAmount" placeholder="Amount">
+            <button onclick="addExpense()">Add Expense</button>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Expense Name</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody id="expenseTable">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        let totalSpent = 0;
+        let budget = 0;
+
+        function setBudget() {
+            budget = parseFloat(document.getElementById("budget").value) || 0;
+            updateSummary();
+        }
+
+        function addExpense() {
+            const date = new Date().toLocaleDateString();
+            const expenseName = document.getElementById("expenseName").value;
+            const expenseAmount = parseFloat(document.getElementById("expenseAmount").value);
+
+            if (expenseName && expenseAmount) {
+                const table = document.getElementById("expenseTable");
+                const row = document.createElement("tr");
+
+                row.innerHTML = `
+                    <td class="date">${date}</td>
+                    <td>${expenseName}</td>
+                    <td>₹${expenseAmount}</td>
+                `;
+                table.appendChild(row);
+
+                totalSpent += expenseAmount;
+                updateSummary();
+
+                document.getElementById("expenseName").value = "";
+                document.getElementById("expenseAmount").value = "";
+            } else {
+                alert("Please fill out all fields.");
+            }
+        }
+
+        function updateSummary() {
+            const remainingBudget = budget - totalSpent;
+            document.getElementById("totalSpent").textContent = `₹${totalSpent}`;
+            document.getElementById("remainingBudget").textContent = `₹${remainingBudget}`;
+        }
+    </script>
+</body>
+</html>
