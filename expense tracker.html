@@ -1,205 +1,262 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Expense Tracker</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
-        body {
-            font-family: 'Poppins', sans-serif;
-            text-align: center;
-            margin: 0;
-            background: linear-gradient(45deg, #ffeff0, #ffc3e6);
-            animation: gradientBG 10s infinite alternate;
-            overflow-x: hidden;
-            padding: 20px;
-        }
-        @keyframes gradientBG {
-            0% { background-position: left; }
-            100% { background-position: right; }
-        }
-        .container {
-            max-width: 1200px;
-            margin: auto;
-            padding: 20px;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
-            position: relative;
-        }
-        h1 {
-            color: #ff69b4;
-            font-size: 2.2rem;
-            margin-bottom: 10px;
-        }
-        h3 {
-            color: #ff1493;
-            font-size: 1.3rem;
-        }
-        .summary {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: center;
-            margin: 20px 0;
-        }
-        .summary div {
-            background: #ffe6f2;
-            padding: 15px;
-            border-radius: 15px;
-            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-            flex: 1;
-            margin: 10px;
-            min-width: 100px;
-        }
-        .expense-section {
-            margin: 20px 0;
-        }
-        .expense-section input, .expense-section button {
-            padding: 10px;
-            margin: 5px;
-            border-radius: 5px;
-            border: 1px solid #ff99cc;
-            background: #fff0f5;
-            font-size: 1rem;
-            width: 90%;
-            max-width: 300px;
-        }
-        button {
-            background: #ff69b4;
-            color: black;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        button:hover {
-            background: #ff1493;
-        }
-        .table-container {
-            width: 100%;
-            overflow-x: auto;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        table, th, td {
-            border: 1px solid #ffe6f2;
-        }
-        th, td {
-            padding: 10px;
-            text-align: center;
-            white-space: nowrap;
-        }
-        th {
-            background-color: #ffccf2;
-            color: #ff1493;
-        }
-        td {
-            background-color: #fff0f5;
-        }
-        td.date {
-            font-weight: bold;
-            color: #ff69b4;
-            font-size: 1.2rem;
-            letter-spacing: 1px;
-        }
-        @media (max-width: 768px) {
-            .summary {
-                flex-direction: column;
-            }
-            .summary div {
-                width: 90%;
-            }
-            h1 {
-                font-size: 2rem;
-            }
-            .expense-section input, .expense-section button {
-                width: 100%;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Expense Diary</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background: linear-gradient(to bottom, #ffe6f0, #ffd1dc);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      width: 90%;
+      max-width: 400px;
+      background: white;
+      border-radius: 20px;
+      padding: 1em;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      position: relative;
+    }
+    h1 {
+      text-align: center;
+      color: #d63384;
+      margin-bottom: 1em;
+    }
+    .top-row, .budget-row, .expense-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.5em;
+      margin-bottom: 1em;
+    }
+    select, input[type="number"], input[type="text"] {
+      flex: 1;
+      padding: 0.5em;
+      border-radius: 10px;
+      border: 1px solid #ffccd5;
+      background-color: #fff0f5;
+    }
+    button {
+      width: 100%;
+      padding: 0.8em;
+      background-color: #f78fb3;
+      border: none;
+      border-radius: 10px;
+      color: white;
+      font-weight: bold;
+      margin-top: 1em;
+    }
+    .summary-box, .budget-box {
+      flex: 1;
+      background-color: #fff0f5;
+      padding: 1em;
+      border-radius: 10px;
+      text-align: center;
+      font-weight: bold;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1em;
+    }
+    th, td {
+      padding: 0.5em;
+      border-bottom: 1px solid #ffccd5;
+      text-align: center;
+    }
+    .cat-img {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      width: 80px;
+      height: auto;
+      z-index: 1;
+      animation: chillFade 3s ease-in-out infinite alternate;
+    }
+    .broke-msg {
+      color: #d63384;
+      font-size: 1em;
+    }
+    @keyframes chillFade {
+      from { opacity: 0.6; }
+      to { opacity: 1; }
+    }
+  </style>
 </head>
+
 <body>
-    <div class="container">
-        <h1>Expense Tracker</h1>
-        <div class="summary">
-            <div>
-                <h3>Set Budget</h3>
-                <input type="number" id="budget" placeholder="" onchange="setBudget()">
-            </div>
-            <div>
-                <h3>Total Spent</h3>
-                <p id="totalSpent">₹0</p>
-            </div>
-            <div>
-                <h3>Remaining</h3>
-                <p id="remainingBudget">₹0</p>
-            </div>
-        </div>
+  <div class="container">
+    <h1> 💰 My Expense Diary</h1>
 
-        <div class="expense-section">
-            <input type="text" id="expenseName" placeholder="Expense Name">
-            <input type="number" id="expenseAmount" placeholder="Amount">
-            <button onclick="addExpense()">Add Expense</button>
-        </div>
-
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Expense Name</th>
-                        <th>Amount</th>
-                    </tr>
-                </thead>
-                <tbody id="expenseTable">
-                </tbody>
-            </table>
-        </div>
+    <div class="top-row">
+      <select id="year">
+        <option>2024</option>
+        <option>2025</option>
+        <option>2026</option>
+        <option>2027</option>
+        <option>2028</option>
+        <option>2029</option>
+        <option>2030</option>
+        <option>2031</option>
+        <option>2032</option>
+        <option>2033</option>
+      </select>
+      <select id="month">
+        <option>January</option>
+        <option>February</option>
+        <option>March</option>
+        <option>April</option>
+        <option>May</option>
+        <option>June</option>
+        <option>July</option>
+        <option>August</option>
+        <option>September</option>
+        <option>October</option>
+        <option>November</option>
+        <option>December</option>
+      </select>
     </div>
 
-    <script>
-        let totalSpent = 0;
-        let budget = 0;
+    <div class="budget-row">
+      <div class="budget-box">
+        <div>Enter Budget</div>
+        <input type="number" id="budgetInput" placeholder="Enter Budget">
+      </div>
+      <div class="summary-box">
+        <div>Remaining Balance</div>
+        <div id="remaining">₹0</div>
+        <div class="broke-msg" id="brokeMsg">Uh-oh, ur broke, gurl! ✨👋</div>
+      </div>
+    </div>
 
-        function setBudget() {
-            budget = parseFloat(document.getElementById("budget").value) || 0;
-            updateSummary();
-        }
+    <div class="expense-row">
+      <input type="text" id="expenseName" placeholder="Expense Name">
+      <input type="number" id="expenseAmount" placeholder="Amount">
+    </div>
 
-        function addExpense() {
-            const date = new Date().toLocaleDateString();
-            const expenseName = document.getElementById("expenseName").value;
-            const expenseAmount = parseFloat(document.getElementById("expenseAmount").value);
+    <button onclick="addExpense()">Add Expense</button>
 
-            if (expenseName && expenseAmount) {
-                const table = document.getElementById("expenseTable");
-                const row = document.createElement("tr");
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Expense</th>
+          <th>Amount</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="expenseTable">
+      </tbody>
+    </table>
 
-                row.innerHTML = `
-                    <td class="date">${date}</td>
-                    <td>${expenseName}</td>
-                    <td>₹${expenseAmount}</td>
-                `;
-                table.appendChild(row);
+    <img src="C:\SS\mmgh\cat2.jpg" alt="Chill Cat" class="cat-img">
+  </div>
 
-                totalSpent += expenseAmount;
-                updateSummary();
+  <script>
+    let budget = 0;
+    let spent = 0;
+    let currentYear = document.getElementById("year").value;
+    let currentMonth = document.getElementById("month").value;
 
-                document.getElementById("expenseName").value = "";
-                document.getElementById("expenseAmount").value = "";
-            } else {
-                alert("Please fill out all fields.");
-            }
-        }
+    document.getElementById("brokeMsg").style.display = "none";
 
-        function updateSummary() {
-            const remainingBudget = budget - totalSpent;
-            document.getElementById("totalSpent").textContent = `₹${totalSpent}`;
-            document.getElementById("remainingBudget").textContent = `₹${remainingBudget}`;
-        }
-    </script>
+    // Set the year and month selection
+    document.getElementById("year").addEventListener("change", function() {
+      currentYear = this.value;
+      loadData();
+    });
+
+    document.getElementById("month").addEventListener("change", function() {
+      currentMonth = this.value;
+      loadData();
+    });
+
+    // Load data for the selected year and month from localStorage
+    function loadData() {
+      const dataKey = `${currentYear}-${currentMonth}`;
+      const savedData = JSON.parse(localStorage.getItem(dataKey)) || { budget: 0, spent: 0, expenses: [] };
+      
+      budget = savedData.budget;
+      spent = savedData.spent;
+      updateRemaining();
+
+      const expenseTable = document.getElementById("expenseTable");
+      expenseTable.innerHTML = '';
+      savedData.expenses.forEach(expense => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${expense.date}</td>
+          <td>${expense.name}</td>
+          <td>₹${expense.amount}</td>
+          <td><button onclick="deleteExpense(this, ${expense.amount})">❌</button></td>
+        `;
+        expenseTable.appendChild(row);
+      });
+    }
+
+    // Update remaining balance
+    function updateRemaining() {
+      const remaining = budget - spent;
+      document.getElementById("remaining").innerText = `₹${remaining}`;
+      document.getElementById("brokeMsg").style.display = remaining <= 0 ? "block" : "none";
+    }
+
+    // Add expense to the table and localStorage
+    function addExpense() {
+      const name = document.getElementById("expenseName").value;
+      const amount = parseInt(document.getElementById("expenseAmount").value);
+      if (!name || isNaN(amount)) return;
+
+      const today = new Date();
+      const date = `${today.getDate()}/${today.getMonth() + 1}/${today.getFullYear()}`;
+
+      const expense = { date, name, amount };
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${date}</td>
+        <td>${name}</td>
+        <td>₹${amount}</td>
+        <td><button onclick="deleteExpense(this, ${amount})">❌</button></td>
+      `;
+      document.getElementById("expenseTable").appendChild(row);
+
+      spent += amount;
+      updateRemaining();
+
+      // Save to localStorage
+      const dataKey = `${currentYear}-${currentMonth}`;
+      const savedData = JSON.parse(localStorage.getItem(dataKey)) || { budget: 0, spent: 0, expenses: [] };
+      savedData.expenses.push(expense);
+      savedData.spent = spent;
+      localStorage.setItem(dataKey, JSON.stringify(savedData));
+
+      // Clear inputs
+      document.getElementById("expenseName").value = "";
+      document.getElementById("expenseAmount").value = "";
+    }
+
+    // Delete expense from the table and localStorage
+    function deleteExpense(btn, amount) {
+      spent -= amount;
+      btn.parentElement.parentElement.remove();
+      updateRemaining();
+
+      // Remove from localStorage
+      const dataKey = `${currentYear}-${currentMonth}`;
+      const savedData = JSON.parse(localStorage.getItem(dataKey)) || { budget: 0, spent: 0, expenses: [] };
+      savedData.expenses = savedData.expenses.filter(expense => expense.amount !== amount);
+      savedData.spent = spent;
+      localStorage.setItem(dataKey, JSON.stringify(savedData));
+    }
+
+    // Load data for the initial year and month
+    loadData();
+  </script>
 </body>
 </html>
